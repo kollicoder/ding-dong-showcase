@@ -173,7 +173,7 @@ function renderSide(v){
 }
 function go(h){
   if (!h) return; if (h === 'sync') return show('sync');
-  if (h.startsWith('click:')) { const t = h.slice(6), f = document.getElementById(view === 'sync' ? 'f-seller' : 'f-' + view); try { const d = f.contentDocument; const el = [...d.querySelectorAll('[role=tab],[role=button],button,a,div')].reverse().find(e => e.textContent.trim().startsWith(t) && e.textContent.length < t.length + 12); el && el.click(); } catch (e) { console.warn(e); } return; }
+  if (h.startsWith('click:')) { const t = h.slice(6), f = document.getElementById(view === 'sync' ? 'f-seller' : 'f-' + view); try { const d = f.contentDocument; const n = x => x.replace(/\s+/g, ''), tt = n(t); const el = [...d.querySelectorAll('[role=tab],[role=button],[role=link],button,a,div')].find(e => { const c = n(e.textContent); return c.startsWith(tt) && c.length < tt.length + 6; }); if (el) { const o = { bubbles: true, cancelable: true, view: f.contentWindow, pointerId: 1, isPrimary: true, button: 0 }; ['pointerdown', 'mousedown', 'pointerup', 'mouseup'].forEach(t => el.dispatchEvent(new (t.startsWith('pointer') ? f.contentWindow.PointerEvent : f.contentWindow.MouseEvent)(t, o))); el.click(); } } catch (e) { console.warn(e); } return; }
   if (view === 'sync') { const f = document.getElementById(h.startsWith('#/customer') ? 'f-customer' : 'f-seller'); if (f && h) f.contentWindow.location.hash = h; return; }
   const f = stage.querySelector('iframe'); if (!f) return;
   try { f.contentWindow.location.hash = h; } catch { f.src = url(V[view].as, h); }
