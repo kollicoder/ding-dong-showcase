@@ -83,6 +83,31 @@ main.admin{grid-template-columns:1fr}main.admin .side{display:grid;grid-template
   .tour{grid-template-columns:1fr 1fr}
   .badge{font-size:11px;padding:6px 10px}
 }
+
+/* ---- 3-phone live sync ---- */
+.s3{width:100%;display:flex;flex-direction:column;align-items:center;gap:12px;min-width:0}
+.s3bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:center}
+.s3bar .btn{min-height:40px;font-size:14px;padding:0 14px}
+.cap{background:var(--ink);color:#fff;border-radius:16px;padding:10px 14px;font-weight:700;font-size:15px;max-width:760px;text-align:center;min-height:42px}
+.cap b{color:var(--y)}
+.steps{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.steps span{font-size:12px;font-weight:700;border-radius:999px;padding:5px 9px;background:#fff;border:1px solid var(--line);color:var(--muted)}
+.steps span.done{background:var(--gs);color:var(--g);border-color:#bfe6c8}.steps span.now{background:var(--y);color:var(--ink);border-color:var(--ink)}
+.phones3{display:flex;gap:calc(28px * var(--s));justify-content:center;align-items:flex-start;max-width:100%;overflow-x:auto;padding:4px 2px 12px;scroll-snap-type:x mandatory}
+.phones3 .dev{scroll-snap-align:center;flex:0 0 auto}
+.phones3 .lbl{font-size:12px}
+@media (max-width:900px){
+  .stage.multi .phoneWrap{width:calc(410px * var(--s));height:calc(864px * var(--s))}
+  .stage.multi .phone{transform:scale(var(--s));width:410px;height:864px;min-height:0;border-radius:64px;padding:10px;background:#111;box-shadow:0 0 0 2px #2a2a2a,0 0 0 9px #c9c4b8}
+  .stage.multi .phone .screen{width:390px;height:844px;border-radius:54px;border:0;padding-top:48px}
+  .stage.multi .phone iframe{width:390px;height:796px}
+  .stage.multi .phone .island,.stage.multi .phone .bar{display:block}
+  .stage.multi .dev{width:auto}.stage.multi .dev .lbl{display:block;font-size:10px;padding:3px 7px}
+  .stage.multi .phones3{justify-content:flex-start}
+  .stage.multi.fitall .phones3{justify-content:center}
+  main.sync3 h1{display:none}main.sync3 .stage{order:3}main.sync3 .creds{order:5}main.sync3 .side .row{display:none}
+  .cap{font-size:13px;padding:8px 10px}.steps span{font-size:10.5px;padding:4px 7px}
+}
 </style>
 </head>
 <body>
@@ -99,7 +124,7 @@ main.admin{grid-template-columns:1fr}main.admin .side{display:grid;grid-template
       <button data-view="seller" role="tab">🏪 Seller</button>
       <button data-view="rider" role="tab">🛵 Rider</button>
       <button data-view="admin" role="tab">🖥️ Admin</button>
-      <button data-view="sync" role="tab" class="wideOnly">🔁 <span class="k">Live sync</span></button>
+      <button data-view="sync3" role="tab">🔁 <span class="k">Live sync · 3 phones</span></button>
     </nav>
     <div class="card creds" id="creds"></div>
     <div class="row" style="margin-bottom:6px">
@@ -148,42 +173,98 @@ function phone(id, src, label, cls=''){ return `<div class="dev ${cls}"><div cla
 function fit(){
   const h = innerHeight - 140, w = stage.clientWidth;
   if (view === 'admin') { const s = Math.min(1, (w - 20) / 1380); stage.style.setProperty('--s', s); return; }
-  const n = view === 'sync' ? 2 : 1; const gap = 40 * (n - 1);
+  if (view === 'sync3') { const big = !wide() && !fitAll; const sw = Math.min(w, innerWidth - 16); const s = wide() ? Math.max(.42, Math.min(.8, (innerHeight - 230) / 880, (sw - 60) / (410 * 3 + 30))) : big ? .62 : Math.max(.2, (sw - 24) / 1380); stage.style.setProperty('--s', s); stage.classList.toggle('fitall', !big); return; }
+  const n = 1; const gap = 40 * (n - 1);
   const s = Math.max(.5, Math.min(1, h / 900, (w - gap) / (410 * n + 20 * n)));
   stage.style.setProperty('--s', s);
 }
 function show(v, hash){
-  if (v === 'sync' && !wide()) v = 'customer';
+  if (v === 'sync') v = 'sync3';
+  if (view === 'sync3' && v !== 'sync3') stopAuto();
+  stage.classList.toggle('multi', v === 'sync3'); document.querySelector('main').classList.toggle('sync3', v === 'sync3'); main3(v === 'sync3');
   view = v; document.querySelector('main').classList.toggle('admin', v === 'admin'); document.querySelectorAll('.tabs button').forEach(b => { b.classList.toggle('on', b.dataset.view === v); b.setAttribute('aria-selected', b.dataset.view === v); });
   const cfg = V[v] || V.customer;
   if (v === 'admin') stage.innerHTML = `<div class="dev"><div class="laptopWrap"><div class="laptop"><div class="lid"><div class="chrome"><i></i><i></i><i></i><div class="url">admin.ding-dong.app · Porur hub</div></div><iframe id="f-admin" name="dd-admin" title="Admin dashboard" src="${url('admin', hash || cfg.hash)}"></iframe></div><div class="base"></div></div></div><span class="lbl">Admin dashboard · demo data</span></div>`;
-  else if (v === 'sync') stage.innerHTML = phone('f-customer', url('customer', '#/customer/home'), '🛍️ Customer · place an order') + `<div class="sync">⇄ same order, live</div>` + phone('f-seller', url('seller', ''), '🏪 Seller · accept it', 'second');
+  else if (v === 'sync3') { stage.innerHTML = `<div class="s3"><div class="s3bar"><button class="btn dark" id="auto">▶ Auto-play demo</button><button class="btn ghost" id="fresh" title="Clear demo orders and start a new run">↺ Fresh start</button><button class="btn ghost" id="scale"></button></div><div class="cap" id="cap">Manual mode: order in the <b>customer</b> phone, accept in the <b>seller</b> phone, deliver in the <b>rider</b> phone. Or press <b>▶ Auto-play</b>.</div><div class="steps" id="steps"></div><div class="phones3">` + phone('f-customer', url('customer', '#/customer/list/fv'), '🛍️ Customer · Lakshmi') + phone('f-seller', url('seller', ''), '🏪 Seller · Porur Fresh') + phone('f-rider', url('rider', '#/rider/home'), '🛵 Rider · Karthik') + `</div></div>`; wire3(); }
   else stage.innerHTML = phone('f-' + v, url(cfg.as, hash || cfg.hash), cfg.em + ' ' + cfg.label);
   renderSide(v); fit();
   history.replaceState(null, '', '#' + v);
 }
 function renderSide(v){
-  const cfg = v === 'sync' ? null : V[v];
+  const cfg = v === 'sync3' ? null : V[v];
   const C = document.getElementById('creds');
   C.innerHTML = cfg ? `<div class="em">${cfg.em}</div><div><b>Signed in automatically</b><div class="small muted">as ${cfg.who}</div><div class="small" style="margin-top:4px">${cfg.code === 'auto' ? 'Demo-only admin account — no real number.' : `Demo login: <code>${cfg.num}</code> · code <code>${cfg.code}</code>`}</div></div>`
-    : `<div class="em">🔁</div><div><b>Watch an order sync live</b><div class="small muted" style="margin-top:4px">1. Add items in the customer phone and place the order.<br>2. It appears on the store side within a second. Accept it and the customer's tracking updates.</div></div>`;
-  const tour = cfg ? cfg.tour : [['c1','🛒','Place an order','Customer: add fruit & veg from Porur Fresh, check out.','#/customer/home'],['c3','✅','Accept it','Seller: tap ✓ Accept on the new order — the customer sees it.','click:📥 Orders']];
+    : `<div class="em">🔁</div><div><b>One order, three phones, live</b><div class="small muted" style="margin-top:4px">1. Customer: add fruit &amp; veg from Porur Fresh (already open) and place the order.<br>2. Seller: ✓ Accept, then mark it ready. Karthik is auto-assigned as the nearest rider.<br>3. Rider: Picked up → Start trip → type the 4-digit code shown on the customer's tracking screen.</div></div>`;
+  const tour = cfg ? cfg.tour : [['c1','🛒','Shop Porur Fresh','Customer: fruit & veg list, then cart and checkout.','#/customer/list/fv'],['c3','✅','Open seller orders','Seller: tap ✓ Accept on your new order.','click:📥 Orders'],['c2','🛵','Rider tasks','Karthik: picked up, start trip, enter code.','#/rider/home'],['c6','📍','Customer tracking','Status steps + the delivery code.','#/customer/track']];
   document.getElementById('tour').innerHTML = tour.map(([c, ic, t, s, h]) => `<button class="${c}" data-hash="${h}"><span class="ic">${ic}</span><b>${t}</b><span>${s}</span></button>`).join('');
   document.querySelectorAll('#tour button').forEach(b => b.onclick = () => go(b.dataset.hash));
   const of = document.getElementById('openFull'); const c2 = cfg || V.customer; of.href = url(c2.as, c2.hash).replace('embed=1&', '');
 }
 function go(h){
   if (!h) return; if (h === 'sync') return show('sync');
-  if (h.startsWith('click:')) { const t = h.slice(6), f = document.getElementById(view === 'sync' ? 'f-seller' : 'f-' + view); try { const d = f.contentDocument; const n = x => x.replace(/\s+/g, ''), tt = n(t); const el = [...d.querySelectorAll('[role=tab],[role=button],[role=link],button,a,div')].find(e => { const c = n(e.textContent); return c.startsWith(tt) && c.length < tt.length + 6; }); if (el) { const o = { bubbles: true, cancelable: true, view: f.contentWindow, pointerId: 1, isPrimary: true, button: 0 }; ['pointerdown', 'mousedown', 'pointerup', 'mouseup'].forEach(t => el.dispatchEvent(new (t.startsWith('pointer') ? f.contentWindow.PointerEvent : f.contentWindow.MouseEvent)(t, o))); el.click(); } } catch (e) { console.warn(e); } return; }
-  if (view === 'sync') { const f = document.getElementById(h.startsWith('#/customer') ? 'f-customer' : 'f-seller'); if (f && h) f.contentWindow.location.hash = h; return; }
+  if (h.startsWith('click:')) { const t = h.slice(6), f = document.getElementById(view === 'sync3' ? 'f-seller' : 'f-' + view); try { const d = f.contentDocument; const n = x => x.replace(/\s+/g, ''), tt = n(t); const el = [...d.querySelectorAll('[role=tab],[role=button],[role=link],button,a,div')].find(e => { const c = n(e.textContent); return c.startsWith(tt) && c.length < tt.length + 6; }); if (el) { const o = { bubbles: true, cancelable: true, view: f.contentWindow, pointerId: 1, isPrimary: true, button: 0 }; ['pointerdown', 'mousedown', 'pointerup', 'mouseup'].forEach(t => el.dispatchEvent(new (t.startsWith('pointer') ? f.contentWindow.PointerEvent : f.contentWindow.MouseEvent)(t, o))); el.click(); } } catch (e) { console.warn(e); } return; }
+  if (view === 'sync3') { const f = document.getElementById(h.startsWith('#/customer') ? 'f-customer' : h.startsWith('#/rider') ? 'f-rider' : 'f-seller'); if (f && h) f.contentWindow.location.hash = h; return; }
   const f = stage.querySelector('iframe'); if (!f) return;
   try { f.contentWindow.location.hash = h; } catch { f.src = url(V[view].as, h); }
   if (!wide()) stage.scrollIntoView({ behavior:'smooth' });
 }
 document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => show(b.dataset.view));
 document.getElementById('reset').onclick = () => { localStorage.removeItem('dd_sandbox_db_v1'); localStorage.removeItem('pd_cart'); try { new BroadcastChannel('dd-sandbox').postMessage('reset'); } catch {} show(view); };
+// ===== 3-phone live sync: shared sandbox DB (localStorage + BroadcastChannel), dispatcher, auto-play =====
+const DBK = 'dd_sandbox_db_v1', CUST = 'demo-919000000001', STEP_L = ['Placed','Accepted','Packed','Picked up','On the way','Delivered'], FLOW3 = ['placed','accepted','ready','picked_up','on_the_way','delivered'];
+const BCH = (() => { try { return new BroadcastChannel('dd-sandbox'); } catch { return null; } })();
+let fitAll = true, autoRun = 0, s3on = false, focusId = null;
+const dbGet = () => { try { return JSON.parse(localStorage.getItem(DBK) || 'null'); } catch { return null; } };
+const dbPut = d => { localStorage.setItem(DBK, JSON.stringify(d)); BCH && BCH.postMessage('changed'); render3(); };
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const $ = id => document.getElementById(id);
+const cap = h => { const c = $('cap'); if (c) c.innerHTML = h; };
+async function waitDb(){ for (let i = 0; i < 60; i++) { const d = dbGet(); if (d) return d; await sleep(150); } return null; }
+async function prep3(){ const d = await waitDb(); if (!d) return; const now = new Date().toISOString();
+  Object.keys(d).forEach(k => { if (k.startsWith('orders/') && d[k].rider === 'r1' && d[k].status !== 'delivered' && d[k].customerUid !== CUST) d[k].rider = 'r6'; });
+  d['riders/r1'] = { ...(d['riders/r1'] || { id:'r1', name:'Karthik', today:6 }), status:'online', lat:13.0368, lng:80.1590, locAt: now };
+  dbPut(d); }
+const myOrder = d => { if (!d) return null; if (focusId && d['orders/' + focusId]) return d['orders/' + focusId];
+  return Object.keys(d).filter(k => k.startsWith('orders/') && d[k].customerUid === CUST && d[k].storeId === 's1').map(k => d[k]).sort((a, b) => a.createdAt < b.createdAt ? 1 : -1)[0] || null; };
+function dispatch3(){ if (!s3on) return; const d = dbGet(); if (!d) return; let ch = false;
+  Object.keys(d).forEach(k => { const o = d[k]; if (k.startsWith('orders/') && o.storeId === 's1' && o.customerUid === CUST && ['accepted','ready'].includes(o.status) && o.rider !== 'r1') { o.rider = 'r1'; o.updatedAt = new Date().toISOString(); ch = true; } });
+  if (ch) dbPut(d); else render3(); }
+function render3(){ const el = $('steps'); if (!el) return; const d = dbGet(), o = myOrder(d);
+  if (!o) { el.innerHTML = '<span>No order yet: place one from the customer phone</span>'; return; }
+  const i = FLOW3.indexOf(o.status), sec = d['orderSecrets/' + o.id];
+  el.innerHTML = `<span class="now">📦 ${o.id} · ₹${o.total}</span>` + STEP_L.map((l, j) => `<span class="${j < i || (j === i && i === 5) ? 'done' : j === i ? 'now' : ''}">${j < i || i === 5 ? '✓ ' : ''}${l}</span>`).join('') + (o.rider === 'r1' ? '<span>🛵 Karthik</span>' : '') + (sec && i < 5 ? `<span>🔐 code ${sec.otp}</span>` : ''); }
+BCH && BCH.addEventListener('message', e => { if (e.data === 'changed') dispatch3(); if (e.data === 'reset') setTimeout(() => { prep3(); render3(); }, 300); });
+addEventListener('storage', e => { if (e.key === DBK) dispatch3(); });
+function main3(on){ s3on = on; if (on) setTimeout(prep3, 600); }
+function setScaleLabel(){ const b = $('scale'); if (b) { b.classList.toggle('hidden', wide()); b.textContent = fitAll ? '🔍 Bigger phones (scroll)' : '🔎 Fit all 3'; } }
+function wire3(){ $('auto').onclick = () => autoRun ? stopAuto() : autoPlay();
+  $('fresh').onclick = () => { stopAuto(); focusId = null; localStorage.removeItem(DBK); localStorage.removeItem('pd_cart'); BCH && BCH.postMessage('reset'); show('sync3'); };
+  $('scale').onclick = () => { fitAll = !fitAll; setScaleLabel(); fit(); }; setScaleLabel(); render3(); }
+function stopAuto(){ autoRun = 0; const b = $('auto'); if (b) b.textContent = '▶ Auto-play demo'; }
+const nav = (id, h) => { try { $(id).contentWindow.location.hash = h; } catch {} };
+function patchOrder(id, p){ const d = dbGet(); const o = d && d['orders/' + id]; if (!o) return; Object.assign(o, p, { updatedAt: new Date().toISOString() }); dbPut(d); }
+function typeOtp(code, id){ try { const f = $('f-rider'), doc = f.contentDocument, w = f.contentWindow; const inp = doc.querySelector(`[data-testid="otp-in-${id}"]`), btn = doc.querySelector(`[data-testid="deliver-${id}"]`); if (!inp || !btn) return false;
+  Object.getOwnPropertyDescriptor(w.HTMLInputElement.prototype, 'value').set.call(inp, code); inp.dispatchEvent(new w.Event('input', { bubbles: true })); setTimeout(() => btn.click(), 700); return true; } catch { return false; } }
+async function autoPlay(){ const run = autoRun = Date.now(); $('auto').textContent = '■ Stop auto-play'; const ok = () => autoRun === run; const W = async ms => { await sleep(ms); return ok(); };
+  await prep3(); const T = 3400;
+  cap('1/7 · <b>Customer</b> Lakshmi opens <b>Porur Fresh Fruits &amp; Veg</b>…'); nav('f-customer', '#/customer/list/fv'); nav('f-rider', '#/rider/home'); go('click:📥 Orders'); if (!await W(T)) return;
+  const d = dbGet(); if (!d) return stopAuto(); const id = 'PD' + Math.floor(5000 + Math.random() * 4000), now = new Date().toISOString(), otp = String(1000 + Math.floor(Math.random() * 9000));
+  const lines = [{ productId:'p1', name:'Tomato', qty:2, price:32 }, { productId:'p2', name:'Onion', qty:1, price:38 }, { productId:'p6', name:'Coriander', qty:2, price:10 }];
+  d['orders/' + id] = { id, type:'order', storeId:'s1', customer:'Lakshmi (demo)', phone:'+919000000001', address:'Flat 3B, Ramaniyam Apts, Porur', lines, subtotal:122, fee:25, total:147, pay:'UPI_DOD', paymentStatus:'due', status:'placed', createdAt:now, updatedAt:now, customerUid:CUST, dropLat:13.0262, dropLng:80.1489 };
+  d['orderSecrets/' + id] = { otp, customerUid:CUST, createdAt:now }; focusId = id; dbPut(d); nav('f-customer', '#/customer/track/' + id);
+  cap(`2/7 · Lakshmi places <b>${id}</b>: 2 kg tomato, onion, coriander · ₹147. It lands on the <b>seller</b> phone instantly.`); if (!await W(T + 800)) return;
+  patchOrder(id, { status:'accepted', rider:'r1' }); cap('3/7 · <b>Seller</b> Murugan taps ✓ Accept. <b>Karthik</b> (nearest online rider) is auto-assigned.'); if (!await W(T)) return;
+  patchOrder(id, { status:'ready' }); cap('4/7 · Seller packs it: <b>Ready for pickup</b>. Rider gets a ping; customer sees "Packed".'); if (!await W(T)) return;
+  patchOrder(id, { status:'picked_up' }); cap('5/7 · <b>Rider</b> Karthik reaches the shop and taps <b>Picked up</b>.'); if (!await W(T)) return;
+  patchOrder(id, { status:'on_the_way' }); cap('6/7 · Karthik starts the trip and <b>navigates</b> to Ramaniyam Apts; the customer\'s map follows him.');
+  for (let k = 1; k <= 6; k++) { if (!await W(700)) return; const x = dbGet(); if (x && x['riders/r1']) { x['riders/r1'].lat = 13.0368 + (13.0262 - 13.0368) * k / 6; x['riders/r1'].lng = 80.1590 + (80.1489 - 80.1590) * k / 6; x['riders/r1'].locAt = new Date().toISOString(); dbPut(x); } }
+  cap(`7/7 · At the door Lakshmi reads out her code <b>${otp}</b>; Karthik types it in and taps Delivered.`); if (!await W(1500)) return;
+  if (!typeOtp(otp, id)) { await sleep(700); patchOrder(id, { status:'delivered', deliveryCode: otp, deliveredAt: new Date().toISOString(), paymentStatus:'collected', collectedVia:'upi' }); }
+  if (!await W(2500)) return; const fin = myOrder(dbGet()); if (fin && fin.status !== 'delivered') patchOrder(id, { status:'delivered', deliveryCode: otp, deliveredAt: new Date().toISOString(), paymentStatus:'collected', collectedVia:'upi' });
+  cap('✅ <b>Delivered</b> on all three phones. Press ▶ to replay, or try it yourself.'); stopAuto(); }
+
 addEventListener('resize', fit);
-const start = (location.hash || '#customer').slice(1); show(V[start] || start === 'sync' ? start : 'customer');
+const start = (location.hash || '#customer').slice(1); show(V[start] || start === 'sync' || start === 'sync3' ? start : 'customer');
 </script>
 </body>
 </html>
