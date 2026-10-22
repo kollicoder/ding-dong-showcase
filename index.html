@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>ding-dong · Try the Porur delivery app</title>
+<meta name="description" content="Explore and use the ding-dong hyperlocal delivery app for Porur, Chennai — customer, seller, rider and admin — right in your browser. Demo sandbox, no sign-up." />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛵</text></svg>" />
+<link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{--bg:#F6F3EC;--ink:#15140F;--ink2:#33302A;--muted:#57554D;--line:#E9E4D8;--soft:#EFEBE1;--y:#FFC93C;--ys:#FFF1C7;--o:#F26A2E;--os:#FFE6D6;--g:#1F7A3A;--gs:#DDF3E1;--l:#E6DEFF;--p:#FFDDE3;
+--fd:"Bricolage Grotesque",system-ui,sans-serif;--fb:"Plus Jakarta Sans",system-ui,sans-serif}
+*{box-sizing:border-box}html,body{margin:0}body{font-family:var(--fb);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+a{color:inherit}button{font:inherit;cursor:pointer}
+.top{display:flex;align-items:center;gap:12px;padding:16px clamp(16px,4vw,48px);position:sticky;top:0;background:rgba(246,243,236,.92);backdrop-filter:blur(8px);z-index:20;border-bottom:1px solid var(--line)}
+.logo{font-family:var(--fd);font-weight:800;font-size:24px;letter-spacing:-.6px;display:flex;align-items:center;gap:8px}
+.logo i{font-style:normal;width:36px;height:36px;border-radius:12px;background:var(--y);display:grid;place-items:center;font-size:20px}
+.badge{margin-left:auto;background:var(--ink);color:#fff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700}
+.badge b{color:var(--y)}
+main{display:grid;grid-template-columns:minmax(320px,440px) minmax(0,1fr);gap:clamp(20px,3vw,48px);padding:28px clamp(16px,4vw,48px) 40px;max-width:1500px;margin:0 auto;align-items:start}
+h1{font-family:var(--fd);font-weight:800;font-size:clamp(34px,4vw,54px);line-height:1.02;letter-spacing:-1.5px;margin:0 0 12px}
+h1 em{font-style:normal;background:var(--y);padding:0 8px;border-radius:12px}
+.lede{font-size:17px;line-height:1.5;color:var(--ink2);margin:0 0 20px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.tabs button{min-height:46px;border-radius:999px;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font-weight:700;padding:0 16px;display:flex;align-items:center;gap:6px}
+.tabs button.on{background:var(--ink);color:#fff}.tabs button.on .k{color:var(--y)}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:16px 18px;margin-bottom:14px}
+.creds{display:flex;gap:12px;align-items:center}.creds .em{font-size:30px;width:52px;height:52px;border-radius:16px;background:var(--ys);display:grid;place-items:center;flex:0 0 52px}
+.creds b{font-family:var(--fd);font-size:18px;display:block}.creds code{background:var(--soft);border-radius:8px;padding:2px 7px;font-size:14px;font-weight:700}
+.muted{color:var(--muted)}.small{font-size:13px;line-height:1.45}
+.sec{font-family:var(--fd);font-weight:800;font-size:20px;margin:22px 0 10px;letter-spacing:-.4px}
+.tour{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tour button{text-align:left;border:0;border-radius:20px;padding:14px;min-height:96px;display:flex;flex-direction:column;gap:4px;color:var(--ink);transition:transform .12s,box-shadow .12s}
+.tour button:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(21,20,15,.12)}.tour button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.tour .ic{font-size:24px}.tour b{font-family:var(--fd);font-size:16px;line-height:1.15}.tour span{font-size:12.5px;color:var(--ink2);line-height:1.35}
+.c1{background:var(--os)}.c2{background:var(--gs)}.c3{background:var(--ys)}.c4{background:var(--l)}.c5{background:var(--p)}.c6{background:#E1EBFF}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{min-height:46px;border-radius:999px;border:0;background:var(--y);color:var(--ink);font-weight:800;padding:0 18px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.ghost{background:transparent;border:1.5px solid var(--ink)}.btn.dark{background:var(--ink);color:#fff}
+.stage{position:sticky;top:84px;min-width:0;min-height:600px;display:flex;justify-content:center;align-items:flex-start;gap:clamp(16px,3vw,44px);flex-wrap:nowrap}
+.dev{display:flex;flex-direction:column;align-items:center;gap:10px}
+.dev .lbl{font-weight:800;font-size:13px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.phoneWrap{width:calc(410px * var(--s));height:calc(864px * var(--s))}
+.phone{width:410px;height:864px;transform:scale(var(--s));transform-origin:top left;background:#111;border-radius:64px;padding:10px;box-shadow:0 0 0 2px #2a2a2a,0 0 0 9px #c9c4b8,0 30px 60px rgba(21,20,15,.28);position:relative}
+.phone .screen{width:390px;height:844px;border-radius:54px;overflow:hidden;background:var(--bg);position:relative}
+.phone .screen{padding-top:48px}.phone iframe{border:0;width:390px;height:796px;display:block;background:var(--bg)}
+.phone .island{position:absolute;top:21px;left:50%;transform:translateX(-50%);width:120px;height:34px;background:#000;border-radius:20px;z-index:3;pointer-events:none}
+.phone .bar{position:absolute;bottom:18px;left:50%;transform:translateX(-50%);width:130px;height:5px;background:rgba(0,0,0,.35);border-radius:3px;z-index:3;pointer-events:none}
+.phone::before{content:"";position:absolute;left:-12px;top:170px;width:4px;height:64px;background:#c9c4b8;border-radius:2px;box-shadow:0 84px 0 #c9c4b8}
+.phone::after{content:"";position:absolute;right:-12px;top:220px;width:4px;height:100px;background:#c9c4b8;border-radius:2px}
+.laptopWrap{width:calc(1280px * var(--s));height:calc(846px * var(--s))}
+.laptop{width:1280px;transform:scale(var(--s));transform-origin:top left}
+.laptop .lid{background:#1b1b1b;border-radius:22px 22px 0 0;padding:14px 14px 0;box-shadow:0 30px 60px rgba(21,20,15,.25)}
+.laptop .chrome{background:#EFEBE1;border-radius:10px 10px 0 0;height:40px;display:flex;align-items:center;gap:8px;padding:0 14px}
+.laptop .chrome i{width:12px;height:12px;border-radius:6px;background:#E0574F;display:inline-block}.laptop .chrome i:nth-child(2){background:#F1B83A}.laptop .chrome i:nth-child(3){background:#5DBE5A}
+.laptop .url{margin-left:14px;flex:1;background:#fff;border-radius:999px;height:26px;display:flex;align-items:center;padding:0 14px;font-size:13px;color:var(--muted)}
+.laptop iframe{width:1252px;height:760px;border:0;display:block;background:var(--bg)}
+.laptop .base{height:26px;background:linear-gradient(#d8d3c8,#b9b4a8);border-radius:0 0 26px 26px;margin:0 -50px;position:relative}
+.laptop .base::after{content:"";position:absolute;left:50%;top:0;transform:translateX(-50%);width:180px;height:10px;background:#a9a498;border-radius:0 0 12px 12px}
+.sync{position:absolute;top:44%;left:50%;transform:translate(-50%,-50%);background:var(--ink);color:var(--y);border-radius:999px;padding:8px 12px;font-weight:800;font-size:13px;z-index:4;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.2)}
+.hint{position:absolute;bottom:-6px;left:50%;transform:translateX(-50%)}
+.foot{padding:24px clamp(16px,4vw,48px) 40px;max-width:1500px;margin:0 auto;color:var(--muted);font-size:13px;line-height:1.6;border-top:1px solid var(--line)}
+.foot b{color:var(--ink)}
+.hidden{display:none!important}
+main.admin{grid-template-columns:1fr}main.admin .side{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:0 28px}main.admin .side>*{grid-column:1}main.admin .side .sec,main.admin .side .tour{grid-column:2}main.admin .side .sec{grid-row:1;align-self:end}main.admin .side .tour{grid-row:2 / span 4;align-self:start}main.admin .stage{position:relative;top:0}
+.mobileOpen{display:none}
+@media (max-width:900px){
+  main,main.admin{grid-template-columns:1fr;padding-top:14px;gap:12px}
+  .side,main.admin .side{display:contents}
+  h1{order:1;font-size:30px;margin:0}.lede{display:none}.tabs{order:2;margin:0}.creds{order:3;margin:0}.side .row{order:4}
+  .stage{order:5;min-height:0;position:relative;top:0}.sec{order:6;margin:8px 0 0}.tour{order:7}
+  .wideOnly{display:none!important}.logo{font-size:20px}.badge .x{display:none}
+  .phoneWrap,.laptopWrap{width:100%;height:auto}
+  .phone{transform:none;width:100%;height:78vh;min-height:560px;border-radius:0;padding:0;background:none;box-shadow:none}
+  .phone::before,.phone::after,.phone .island,.phone .bar{display:none}
+  .phone .screen{width:100%;height:100%;border-radius:22px;border:1px solid var(--line)}
+  .phone .screen{padding-top:0}.phone iframe{width:100%;height:100%}
+  .laptop{transform:none;width:100%}.laptop .lid{padding:8px 8px 0;border-radius:14px 14px 0 0}.laptop iframe{width:100%;height:70vh}.laptop .base{margin:0 -10px}
+  .dev{width:100%}.dev .lbl{display:none}.side .row .btn{min-height:42px;font-size:14px}
+  .dev.second,.sync{display:none!important}
+  .mobileOpen{display:inline-flex}
+  .tour{grid-template-columns:1fr 1fr}
+  .badge{font-size:11px;padding:6px 10px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="logo"><i>🛵</i>ding-dong</div>
+  <span class="badge">🧪 <b>Demo sandbox</b><span class="x"> · nothing here is real</span></span>
+</header>
+<main>
+  <section class="side">
+    <h1>Porur's everything app. <em>Try it.</em></h1>
+    <p class="lede">Groceries, medicines and food from local shops in about 30 minutes, plus the grocery meter, office lunches, home services and flash deals. Tap around. Every app below is the real app, running on demo data in your browser.</p>
+    <nav class="tabs" role="tablist" aria-label="Choose an app">
+      <button data-view="customer" role="tab">🛍️ Customer</button>
+      <button data-view="seller" role="tab">🏪 Seller</button>
+      <button data-view="rider" role="tab">🛵 Rider</button>
+      <button data-view="admin" role="tab">🖥️ Admin</button>
+      <button data-view="sync" role="tab" class="wideOnly">🔁 <span class="k">Live sync</span></button>
+    </nav>
+    <div class="card creds" id="creds"></div>
+    <div class="row" style="margin-bottom:6px">
+      <a class="btn dark mobileOpen" id="openFull" target="_blank" rel="noopener">Open full screen ↗</a>
+      <button class="btn ghost" id="reset" title="Clear all demo orders and start fresh">↺ Reset demo data</button>
+    </div>
+    <div class="sec">Try this</div>
+    <div class="tour" id="tour"></div>
+  </section>
+  <section class="stage" id="stage" aria-live="polite"></section>
+</main>
+<footer class="foot">
+  <p><b>About this demo.</b> ding-dong is a working name for a hyperlocal delivery app being piloted in Porur, Chennai 600116. This page runs the actual web app in a <b>sandbox</b>: the stores, products, riders and orders are sample data kept in your own browser, so you can place orders, accept them as a seller and deliver them as a rider without touching anyone's real account. Sign-in is automatic with demo numbers. Nothing you do here is sent to the live service, and real SMS codes are never used.</p>
+  <p>Voice ordering uses your browser's speech recognition (best in Chrome). Prices, ETAs and partners are illustrative.</p>
+</footer>
+<script>window.SELLER_APP='seller/';</script>
+<script>window.SELLER_APP='seller/';</script>
+<script>
+const APP = 'app/', SELLER_APP = window.SELLER_APP || null;
+const url = (as, hash, frame) => SELLER_APP && as === 'seller' && !hash.startsWith('#/partner')
+  ? `${SELLER_APP}?embed=1&demo=seller&frame=dd-${frame||as}` : `${APP}?embed=1&demo=${as}&frame=dd-${frame||as}${hash}`;
+const V = {
+  customer: { as:'customer', hash:'#/customer/home', label:'Customer app', em:'🛍️', who:'Lakshmi, a Porur resident', num:'+91 90000 00001', code:'111111',
+    tour:[['c1','🎤','Say your order by voice','“2 kg tomato, 1 litre milk” — it fills the cart.','#/customer/voice'],
+      ['c2','🧺','Join the grocery meter','Commit to a basket; price drops when 100 join.','#/customer/meter'],
+      ['c3','🔥','Grab a flash deal','Tonight\'s surplus biriyani at 30–60% off.','#/customer/deals'],
+      ['c4','🔧','Book a plumber','₹149 inspection, 2-hour slot, 30-day warranty.','#/customer/services'],
+      ['c5','🍱','Office lunch for 5+','Home-cooked packs delivered 12:15–12:45.','#/customer/lunch'],
+      ['c6','📍','Track your rider','Live map, status steps and delivery code.','#/customer/track']] },
+  seller: { as:'seller', hash: SELLER_APP ? '' : '#/partner/home', label:'Seller app', em:'🏪', who:'Murugan, Porur Fresh Fruits & Veg', num:'+91 90000 00002', code:'222222',
+    tour:[['c2','✅','Accept a new order','Tap ✓ Accept on PD1042, then mark it ready for pickup.','click:📥 Orders'],
+      ['c1','🎙️','Post a flash deal by voice','Open 🔥 Deals and say “10 biriyanis at 100 off”.','click:🔥 Deals'],
+      ['c4','🏷️','Mark items out of stock','Toggle stock so customers can\'t order it.','click:🏷️ Items'],
+      ['c3','🔁','Watch an order arrive live','Order as a customer, see it land here instantly.','sync']] },
+  rider: { as:'rider', hash:'#/rider/home', label:'Rider app', em:'🛵', who:'Karthik, delivery partner', num:'+91 90000 00004', code:'444444',
+    tour:[['c2','🟢','Go on duty','Turn on (simulated) location and take tasks.','#/rider/home'],
+      ['c3','🔐','Deliver with a code','Ask for the customer\'s 4-digit code to finish.','#/rider/home']] },
+  admin: { as:'admin', hash:'#/admin-desktop/overview', label:'Admin dashboard', em:'🖥️', who:'Hub admin (demo account, demo data only)', num:'Demo admin', code:'auto',
+    tour:[['c4','📊','Live orders board','Assign riders and follow every order.','#/admin-desktop/orders'],
+      ['c2','🧺','Group-buy batches','Meters, leaders and the supplier list.','#/admin-desktop/groupbuy']] },
+};
+let view = null;
+const stage = document.getElementById('stage');
+const wide = () => matchMedia('(min-width:901px)').matches;
+function phone(id, src, label, cls=''){ return `<div class="dev ${cls}"><div class="phoneWrap"><div class="phone"><div class="island"></div><div class="screen"><iframe id="${id}" name="dd-${id.replace('f-','')}" title="${label}" src="${src}" allow="microphone; geolocation"></iframe></div><div class="bar"></div></div></div><span class="lbl">${label}</span></div>`; }
+function fit(){
+  const h = innerHeight - 140, w = stage.clientWidth;
+  if (view === 'admin') { const s = Math.min(1, (w - 20) / 1380); stage.style.setProperty('--s', s); return; }
+  const n = view === 'sync' ? 2 : 1; const gap = 40 * (n - 1);
+  const s = Math.max(.5, Math.min(1, h / 900, (w - gap) / (410 * n + 20 * n)));
+  stage.style.setProperty('--s', s);
+}
+function show(v, hash){
+  if (v === 'sync' && !wide()) v = 'customer';
+  view = v; document.querySelector('main').classList.toggle('admin', v === 'admin'); document.querySelectorAll('.tabs button').forEach(b => { b.classList.toggle('on', b.dataset.view === v); b.setAttribute('aria-selected', b.dataset.view === v); });
+  const cfg = V[v] || V.customer;
+  if (v === 'admin') stage.innerHTML = `<div class="dev"><div class="laptopWrap"><div class="laptop"><div class="lid"><div class="chrome"><i></i><i></i><i></i><div class="url">admin.ding-dong.app · Porur hub</div></div><iframe id="f-admin" name="dd-admin" title="Admin dashboard" src="${url('admin', hash || cfg.hash)}"></iframe></div><div class="base"></div></div></div><span class="lbl">Admin dashboard · demo data</span></div>`;
+  else if (v === 'sync') stage.innerHTML = phone('f-customer', url('customer', '#/customer/home'), '🛍️ Customer · place an order') + `<div class="sync">⇄ same order, live</div>` + phone('f-seller', url('seller', ''), '🏪 Seller · accept it', 'second');
+  else stage.innerHTML = phone('f-' + v, url(cfg.as, hash || cfg.hash), cfg.em + ' ' + cfg.label);
+  renderSide(v); fit();
+  history.replaceState(null, '', '#' + v);
+}
+function renderSide(v){
+  const cfg = v === 'sync' ? null : V[v];
+  const C = document.getElementById('creds');
+  C.innerHTML = cfg ? `<div class="em">${cfg.em}</div><div><b>Signed in automatically</b><div class="small muted">as ${cfg.who}</div><div class="small" style="margin-top:4px">${cfg.code === 'auto' ? 'Demo-only admin account — no real number.' : `Demo login: <code>${cfg.num}</code> · code <code>${cfg.code}</code>`}</div></div>`
+    : `<div class="em">🔁</div><div><b>Watch an order sync live</b><div class="small muted" style="margin-top:4px">1. Add items in the customer phone and place the order.<br>2. It appears on the store side within a second. Accept it and the customer's tracking updates.</div></div>`;
+  const tour = cfg ? cfg.tour : [['c1','🛒','Place an order','Customer: add fruit & veg from Porur Fresh, check out.','#/customer/home'],['c3','✅','Accept it','Seller: tap ✓ Accept on the new order — the customer sees it.','click:📥 Orders']];
+  document.getElementById('tour').innerHTML = tour.map(([c, ic, t, s, h]) => `<button class="${c}" data-hash="${h}"><span class="ic">${ic}</span><b>${t}</b><span>${s}</span></button>`).join('');
+  document.querySelectorAll('#tour button').forEach(b => b.onclick = () => go(b.dataset.hash));
+  const of = document.getElementById('openFull'); const c2 = cfg || V.customer; of.href = url(c2.as, c2.hash).replace('embed=1&', '');
+}
+function go(h){
+  if (!h) return; if (h === 'sync') return show('sync');
+  if (h.startsWith('click:')) { const t = h.slice(6), f = document.getElementById(view === 'sync' ? 'f-seller' : 'f-' + view); try { const d = f.contentDocument; const el = [...d.querySelectorAll('[role=tab],[role=button],button,a,div')].reverse().find(e => e.textContent.trim().startsWith(t) && e.textContent.length < t.length + 12); el && el.click(); } catch (e) { console.warn(e); } return; }
+  if (view === 'sync') { const f = document.getElementById(h.startsWith('#/customer') ? 'f-customer' : 'f-seller'); if (f && h) f.contentWindow.location.hash = h; return; }
+  const f = stage.querySelector('iframe'); if (!f) return;
+  try { f.contentWindow.location.hash = h; } catch { f.src = url(V[view].as, h); }
+  if (!wide()) stage.scrollIntoView({ behavior:'smooth' });
+}
+document.querySelectorAll('.tabs button').forEach(b => b.onclick = () => show(b.dataset.view));
+document.getElementById('reset').onclick = () => { localStorage.removeItem('dd_sandbox_db_v1'); localStorage.removeItem('pd_cart'); try { new BroadcastChannel('dd-sandbox').postMessage('reset'); } catch {} show(view); };
+addEventListener('resize', fit);
+const start = (location.hash || '#customer').slice(1); show(V[start] || start === 'sync' ? start : 'customer');
+</script>
+</body>
+</html>
